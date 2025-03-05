@@ -13,6 +13,7 @@ const dataSeconds = document.querySelector('[data-seconds]');
 
 let userSelectedDate = null;
 let timerInterval = null;
+startBtn.disabled = true;
 
 const options = {
   enableTime: true,
