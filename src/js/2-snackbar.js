@@ -15,13 +15,31 @@ form.addEventListener('submit', event => {
 
   if (isNaN(delayValue) || delayValue <= 0) {
     iziToast.error({
+      icon: '',
       position: 'topRight',
       title: '❌ Error',
       message: 'Please enter a valid positive delay value',
     });
     return;
   }
-  createPromise(radioValue, delayValue);
+
+  createPromise(radioValue, delayValue)
+    .then(delay => {
+      iziToast.success({
+        icon: '',
+        position: 'topRight',
+        title: '✅',
+        message: `Fulfilled promise in ${delay}ms`,
+      });
+    })
+    .catch(delay => {
+      iziToast.error({
+        icon: '',
+        position: 'topRight',
+        title: '❌',
+        message: `Rejected promise in ${delay}ms`,
+      });
+    });
 
   form.reset();
 });
@@ -30,24 +48,10 @@ function createPromise(selectedRadio, selectedDelay) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (selectedRadio === 'fulfilled') {
-        resolve(`✅ Fulfilled promise in ${selectedDelay}ms`);
+        resolve(selectedDelay);
       } else {
-        reject(`❌ Rejected promise in ${selectedDelay}ms`);
+        reject(selectedDelay);
       }
     }, selectedDelay);
-  })
-    .then(message => {
-      iziToast.success({
-        position: 'topRight',
-        title: 'Success',
-        message: message,
-      });
-    })
-    .catch(error => {
-      iziToast.error({
-        position: 'topRight',
-        title: 'Error',
-        message: error,
-      });
-    });
+  });
 }
